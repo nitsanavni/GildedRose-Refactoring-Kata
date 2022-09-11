@@ -22,7 +22,8 @@ CPPFLAGS += -I$(CPPUTEST_HOME)/include
 # Flags passed to the C++ compiler.
 CFLAGS += -g -Wall -Wextra
 
-LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest
+# LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
+LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -L$(CPPUTEST_HOME)/cpputest_build/lib -lCppUTest -lCppUTestExt
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
