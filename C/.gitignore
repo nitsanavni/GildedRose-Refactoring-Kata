@@ -1,0 +1,6 @@
+cpputest
+CppUTest
+
+// make targets
+*.o
+GildedRoseUnitTests
