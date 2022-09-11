@@ -1,3 +1,4 @@
+#include <cstring>
 #define APPROVALS_CPPUTEST_EXISTING_MAIN
 // must come before the CppUTest #includes to avoid some build errors
 #include "ApprovalTests.hpp"
@@ -35,7 +36,32 @@ TEST(TestGildedRoseGroup, FirstTest)
 
 TEST(TestGildedRoseGroup, ApprovalTestsTest)
 {
-  Approvals::verify(42, Options(*CustomReporter::createForegroundReporter("code", "-d {Received} {Approved}")));
+  Item items[1];
+  
+  init_item(items, "Foo", 0, 0);
+  
+  char before[20];
+  print_item(before, items);
+  
+  update_quality(items, 1);
+
+  char after[20];
+  print_item(after, items);
+
+  char all[1000];
+
+  all[0] = 0;
+
+  strcat(all, "before");
+  strcat(all, "\n");
+  strcat(all, before);
+  strcat(all, "\n");
+  strcat(all, "after");
+  strcat(all, "\n");
+  strcat(all, after);
+  strcat(all, "\n");
+  
+  Approvals::verify(all, Options(*CustomReporter::createForegroundReporter("code", "-d {Received} {Approved}")));
 }
 
 void example()
@@ -52,14 +78,15 @@ void example()
     update_quality(items, last);
 }
 
+
 int
 main(int ac, char** av)
 {
   ApprovalTests::initializeApprovalTestsForCppUTest();
-  auto gpReporter = CustomReporter::createForegroundReporter("code", "-d");
-  // Approvals::useAsDefaultReporter(std::make_shared<DiffReporter>(gpReporter));
+  // this doesn't work for some reason 🤔
+  Approvals::useAsDefaultReporter(CustomReporter::createForegroundReporter("code", "-d {Received} {Approved}"));
 
-  // does this line cause a failure?
+  // does this line cause a failure? 🤔
   // TestRegistry::getCurrentRegistry()->resetPlugins();
 
   return CommandLineTestRunner::RunAllTests(ac, av);
