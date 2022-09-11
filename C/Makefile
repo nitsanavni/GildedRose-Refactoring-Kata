@@ -49,3 +49,9 @@ clean :
 
 check-syntax:
 	gcc $(CPPFLAGS) -o /dev/null -S ${CHK_SOURCES}
+
+text: all
+	./GildedRoseTextTests
+
+unit: all
+	./GildedRoseUnitTests

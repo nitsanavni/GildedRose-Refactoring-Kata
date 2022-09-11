@@ -4,3 +4,4 @@ CppUTest
 // make targets
 *.o
 GildedRoseUnitTests
+GildedRoseTextTests

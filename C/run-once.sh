@@ -1,2 +1,1 @@
-make
-./GildedRoseTextTests
+make text
