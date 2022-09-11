@@ -5,3 +5,9 @@ CppUTest
 *.o
 GildedRoseUnitTests
 GildedRoseTextTests
+
+// gitpod
+core.*
+
+// approvals
+*.received.*

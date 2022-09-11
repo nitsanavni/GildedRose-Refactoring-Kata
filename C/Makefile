@@ -17,12 +17,12 @@ CPPUTEST_HOME = CppUTest
 USER_DIR = .
 
 # Flags passed to the preprocessor.
-CPPFLAGS += -I$(CPPUTEST_HOME)/include
+CPPFLAGS += -I$(CPPUTEST_HOME)/include -Ilib
 
 # Flags passed to the C++ compiler.
 CFLAGS += -g -Wall -Wextra
 
-LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest
+LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -Llib -lCppUTestExt
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.

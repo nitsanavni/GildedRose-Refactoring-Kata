@@ -1,6 +1,10 @@
+#define APPROVALS_CPPUTEST_EXISTING_MAIN
+#include "ApprovalTests.hpp"
+
 #include <CppUTest/TestHarness.h>
 #include <CppUTest/CommandLineTestRunner.h>
 #include <CppUTestExt/MockSupport.h>
+
 
 extern "C" {
 #include "GildedRose.h"
@@ -22,6 +26,11 @@ TEST(TestGildedRoseGroup, FirstTest)
     STRCMP_EQUAL("fixme", items[0].name);
 }
 
+TEST(TestGildedRoseGroup, ApprovalTestsTest)
+{
+  ApprovalTests::Approvals::verify(42);
+}
+
 void example()
 {
     Item items[6];
@@ -39,5 +48,9 @@ void example()
 int
 main(int ac, char** av)
 {
+  ApprovalTests::initializeApprovalTestsForCppUTest();
+
+  // TestRegistry::getCurrentRegistry()->resetPlugins();
+
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
