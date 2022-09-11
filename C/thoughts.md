@@ -1,3 +1,4 @@
 - have a separate make target for the approval tests
 - do the actual kata
 - why des clang not work in vscode?
+- should some of this be part of approvals?
