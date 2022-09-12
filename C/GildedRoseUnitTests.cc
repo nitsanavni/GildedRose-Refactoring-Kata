@@ -61,7 +61,7 @@ TEST(TestGildedRoseGroup, ApprovalTestsTest)
   strcat(all, after);
   strcat(all, "\n");
   
-  Approvals::verify(all, Options(*CustomReporter::createForegroundReporter("code", "-d {Received} {Approved}")));
+  Approvals::verify(all);
 }
 
 void example()
@@ -83,11 +83,11 @@ int
 main(int ac, char** av)
 {
   ApprovalTests::initializeApprovalTestsForCppUTest();
-  // this doesn't work for some reason 🤔
-  Approvals::useAsDefaultReporter(CustomReporter::createForegroundReporter("code", "-d {Received} {Approved}"));
+  auto disposer = Approvals::useAsDefaultReporter(CustomReporter::createForegroundReporter("code", "-d {Received} {Approved}"));
 
-  // does this line cause a failure? 🤔
-  // TestRegistry::getCurrentRegistry()->resetPlugins();
-
-  return CommandLineTestRunner::RunAllTests(ac, av);
+  auto result = CommandLineTestRunner::RunAllTests(ac, av);
+  
+  TestRegistry::getCurrentRegistry()->resetPlugins();
+  
+  return result;
 }
