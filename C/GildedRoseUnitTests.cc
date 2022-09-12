@@ -83,7 +83,7 @@ int
 main(int ac, char** av)
 {
   ApprovalTests::initializeApprovalTestsForCppUTest();
-  auto disposer = Approvals::useAsDefaultReporter(CustomReporter::createForegroundReporter("code", "-d {Received} {Approved}"));
+  auto disposer = Approvals::useAsDefaultReporter(CustomReporter::create("code", "-d {Received} {Approved}"));
 
   auto result = CommandLineTestRunner::RunAllTests(ac, av);
   
