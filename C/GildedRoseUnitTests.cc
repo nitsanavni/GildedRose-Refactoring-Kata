@@ -1,18 +1,6 @@
-#include <cstring>
-#define APPROVALS_CPPUTEST_EXISTING_MAIN
-// must come before the CppUTest #includes to avoid some build errors
-#include "ApprovalTests.hpp"
-
-using namespace ApprovalTests;
-
-#include <memory>
-
-
 #include <CppUTest/TestHarness.h>
 #include <CppUTest/CommandLineTestRunner.h>
 #include <CppUTestExt/MockSupport.h>
-
-
 
 extern "C" {
 #include "GildedRose.h"
@@ -32,37 +20,6 @@ TEST(TestGildedRoseGroup, FirstTest)
     init_item(items, "Foo", 0, 0);
     update_quality(items, 1);
     STRCMP_EQUAL("fixme", items[0].name);
-//    STRCMP_EQUAL("fixme", items[0].name);
-}
-
-TEST(TestGildedRoseGroup, ApprovalTestsTest)
-{
-  Item items[1];
-  
-  init_item(items, "Foo", 0, 0);
-  
-  char before[20];
-  print_item(before, items);
-  
-  update_quality(items, 1);
-
-  char after[20];
-  print_item(after, items);
-
-  char all[1000];
-
-  all[0] = 0;
-
-  strcat(all, "before");
-  strcat(all, "\n");
-  strcat(all, before);
-  strcat(all, "\n");
-  strcat(all, "after");
-  strcat(all, "\n");
-  strcat(all, after);
-  strcat(all, "\n");
-  
-  Approvals::verify(all);
 }
 
 void example()
@@ -83,18 +40,5 @@ void example()
 int
 main(int ac, char** av)
 {
-  ApprovalTests::initializeApprovalTestsForCppUTest();
-  const std::shared_ptr<GenericDiffReporter> &code = CustomReporter::create("code",
-                                                                            "-d {Received} {Approved}");
-//  const std::shared_ptr<GenericDiffReporter> &clion = CustomReporter::create("clion",
-//                                                                             "diff {Received} {Approved}");
-//  const std::shared_ptr<GenericDiffReporter> &git = CustomReporter::create("git",
-//                                                                           "diff --no-index -- {Received} {Approved}");
-  auto disposer = Approvals::useAsDefaultReporter(code);
-
-  auto result = CommandLineTestRunner::RunAllTests(ac, av);
-  
-  TestRegistry::getCurrentRegistry()->resetPlugins();
-  
-  return result;
+  return CommandLineTestRunner::RunAllTests(ac, av);
 }
