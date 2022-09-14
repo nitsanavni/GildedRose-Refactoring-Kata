@@ -2,10 +2,10 @@ CPPUTEST_HOME = CppUTest
 
 USER_DIR = .
 
-CPPFLAGS += -I$(CPPUTEST_HOME)/include -Ilib
+CPPFLAGS += -I$(CPPUTEST_HOME)/include
 CFLAGS += -g -Wall -Wextra
 CPP_ONLY_FLAGS = -std=c++11
-LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -Llib -lCppUTestExt
+LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 
 all : GildedRoseUnitTests GildedRoseTextTests
 
