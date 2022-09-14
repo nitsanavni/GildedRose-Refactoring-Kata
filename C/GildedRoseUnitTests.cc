@@ -84,7 +84,13 @@ int
 main(int ac, char** av)
 {
   ApprovalTests::initializeApprovalTestsForCppUTest();
-  auto disposer = Approvals::useAsDefaultReporter(CustomReporter::create("code", "-d {Received} {Approved}"));
+  const std::shared_ptr<GenericDiffReporter> &code = CustomReporter::create("code",
+                                                                            "-d {Received} {Approved}");
+//  const std::shared_ptr<GenericDiffReporter> &clion = CustomReporter::create("clion",
+//                                                                             "diff {Received} {Approved}");
+//  const std::shared_ptr<GenericDiffReporter> &git = CustomReporter::create("git",
+//                                                                           "diff --no-index -- {Received} {Approved}");
+  auto disposer = Approvals::useAsDefaultReporter(code);
 
   auto result = CommandLineTestRunner::RunAllTests(ac, av);
   
