@@ -11,3 +11,6 @@ core.*
 
 // approvals
 *.received.*
+
+// debug
+*.dSYM

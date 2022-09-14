@@ -32,6 +32,7 @@ TEST(TestGildedRoseGroup, FirstTest)
     init_item(items, "Foo", 0, 0);
     update_quality(items, 1);
     STRCMP_EQUAL("fixme", items[0].name);
+//    STRCMP_EQUAL("fixme", items[0].name);
 }
 
 TEST(TestGildedRoseGroup, ApprovalTestsTest)
