@@ -1,5 +1,7 @@
+// deps
 cpputest
 CppUTest
+ApprovalTests*
 
 // make targets
 *.o
