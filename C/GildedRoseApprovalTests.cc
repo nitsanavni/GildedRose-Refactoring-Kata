@@ -1,4 +1,5 @@
 #define APPROVALS_CPPUTEST_EXISTING_MAIN
+
 #include "ApprovalTests.hpp"
 
 using namespace ApprovalTests;
@@ -7,6 +8,7 @@ using namespace ApprovalTests;
 #include <CppUTest/CommandLineTestRunner.h>
 
 #include <vector>
+#include <sstream>
 
 extern "C" {
 #include "GildedRose.h"
@@ -24,8 +26,6 @@ TEST(TestGildedRoseGroup, TestUsingApprovals) {
     const int n = 9;
     Item items[n];
     int last = 0;
-    int day;
-    int index;
 
     init_item(items + last++, "+5 Dexterity Vest", 10, 20);
     init_item(items + last++, "Aged Brie", 2, 0);
@@ -38,14 +38,7 @@ TEST(TestGildedRoseGroup, TestUsingApprovals) {
     // this Conjured item doesn't yet work properly
     init_item(items + last++, "Conjured Mana Cake", 3, 6);
 
-
-    std::vector<Item> vec;
-
-    vec.insert(vec.end(), std::begin(items), std::end(items));
-
-    update_quality(items, n);
-    vec.insert(vec.end(), std::begin(items), std::end(items));
-
+    std::stringstream s;
 
     void (*printItem)(const Item &, std::ostream &) = [](const Item &item, std::ostream &os) {
         os << "name: " << item.name << ", "
@@ -53,7 +46,17 @@ TEST(TestGildedRoseGroup, TestUsingApprovals) {
            << "sellIn: " << item.sellIn;
     };
 
-    Approvals::verifyAll("Title", vec, printItem);
+    for (int day = 0; day < 30; ++day) {
+        s << "day " << day << "\n";
+        for (int i = 0; i < n; ++i) {
+            printItem(items[i], s);
+            s << "\n";
+        }
+        s << "\n\n";
+        update_quality(items, n);
+    }
+
+    Approvals::verify(s.str());
 }
 
 int
