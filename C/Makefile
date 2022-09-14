@@ -28,11 +28,11 @@ clean :
 check-syntax:
 	gcc $(CPPFLAGS) -o /dev/null -S ${CHK_SOURCES}
 
-text: all
+text: GildedRoseTextTests
 	./GildedRoseTextTests
 
-unit: all
+unit: GildedRoseUnitTests
 	./GildedRoseUnitTests
 
-approvals: all
+approvals: GildedRoseApprovalTests
 	./GildedRoseApprovalTests
