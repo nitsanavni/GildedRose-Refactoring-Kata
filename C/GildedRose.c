@@ -7,27 +7,23 @@ void update_item_quality(Item *item);
 
 void update_brie(Item *item);
 
-Item*
-init_item(Item* item, const char *name, int sellIn, int quality)
-{
+Item *
+init_item(Item *item, const char *name, int sellIn, int quality) {
     item->sellIn = sellIn;
     item->quality = quality;
     item->name = strdup(name);
-    
+
     return item;
 }
 
-extern char* 
-print_item(char* buffer, Item* item) 
-{
+extern char *
+print_item(char *buffer, Item *item) {
     sprintf(buffer, "%s, %d, %d", item->name, item->sellIn, item->quality);
 }
 
-void 
-update_quality(Item items[], int size) 
-{
-    for (int i = 0; i < size; i++)
-    {
+void
+update_quality(Item items[], int size) {
+    for (int i = 0; i < size; i++) {
         update_item_quality(items + i);
     }
 }
@@ -69,8 +65,7 @@ void update_item_quality(Item *item) {
 
     item->sellIn = item->sellIn - 1;
 
-    if (item->sellIn < 0)
-    {
+    if (item->sellIn < 0) {
         if (backstage_passes) {
             item->quality = 0;
         } else {
@@ -83,17 +78,14 @@ void update_item_quality(Item *item) {
 
 void update_brie(Item *item) {
     if (item->quality < 50) {
-    item->quality = item->quality + 1;
-}
+        item->quality = item->quality + 1;
+    }
 
     item->sellIn = item->sellIn - 1;
 
-    if (item->sellIn < 0)
-    {
+    if (item->sellIn < 0) {
         if (item->quality < 50) {
             item->quality = item->quality + 1;
         }
     }
-
-    return;
 }
