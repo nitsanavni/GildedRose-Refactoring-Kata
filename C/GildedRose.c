@@ -5,6 +5,8 @@
 
 void update_item_quality(Item *item);
 
+void update_brie(Item *item);
+
 Item*
 init_item(Item* item, const char *name, int sellIn, int quality)
 {
@@ -40,19 +42,7 @@ void update_item_quality(Item *item) {
     }
 
     if (brie) {
-        if (item->quality < 50) {
-            item->quality = item->quality + 1;
-        }
-
-        item->sellIn = item->sellIn - 1;
-
-        if (item->sellIn < 0)
-        {
-            if (item->quality < 50) {
-                item->quality = item->quality + 1;
-            }
-        }
-
+        update_brie(item);
         return;
     }
 
@@ -89,4 +79,21 @@ void update_item_quality(Item *item) {
             }
         }
     }
+}
+
+void update_brie(Item *item) {
+    if (item->quality < 50) {
+    item->quality = item->quality + 1;
+}
+
+    item->sellIn = item->sellIn - 1;
+
+    if (item->sellIn < 0)
+    {
+        if (item->quality < 50) {
+            item->quality = item->quality + 1;
+        }
+    }
+
+    return;
 }
