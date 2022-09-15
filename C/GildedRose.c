@@ -28,8 +28,7 @@ update_quality(Item items[], int size)
     
     for (i = 0; i < size; i++)
     {
-        Item * item = items + i;
-        update_item_quality(item);
+        update_item_quality(items + i);
     }
 }
 
