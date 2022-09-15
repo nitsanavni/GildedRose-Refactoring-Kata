@@ -40,6 +40,7 @@ void update_item_quality(Item *item) {
     }
 
     if (brie) {
+        backstage_passes = 0;
         if (item->quality < 50) {
             item->quality = item->quality + 1;
 
