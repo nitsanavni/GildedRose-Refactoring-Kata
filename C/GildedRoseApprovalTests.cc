@@ -48,11 +48,14 @@ TEST(TestGildedRoseGroup, TestUsingApprovals) {
 
     for (int day = 0; day < 30; ++day) {
         s << "day " << day << "\n";
-        for (auto item : items) {
+
+        for (auto item: items) {
             printItem(item, s);
             s << "\n";
         }
+
         s << "\n\n";
+
         update_quality(items, n);
     }
 
