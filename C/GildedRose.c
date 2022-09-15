@@ -9,6 +9,12 @@ void update_brie(Item *item);
 
 void update_backstage_passes(Item *item);
 
+void clip_quality(Item *item);
+
+int backstage_passes_qd(int sellIn);
+
+void default_update_item(Item *item);
+
 Item *
 init_item(Item *item, const char *name, int sellIn, int quality) {
     item->sellIn = sellIn;
@@ -36,63 +42,58 @@ void update_item_quality(Item *item) {
     int backstage_passes = !strcmp(item->name, "Backstage passes to a TAFKAL80ETC concert");
 
     if (sulfuras) {
-        return;
-    }
-
-    if (brie) {
+        // do nothing
+    } else if (brie) {
         update_brie(item);
-        return;
-    }
-
-    if (backstage_passes) {
+    } else if (backstage_passes) {
         update_backstage_passes(item);
-        return;
+    } else {
+        default_update_item(item);
     }
+}
 
-    if (item->quality > 0) {
-        item->quality = item->quality - 1;
-    }
-
+void default_update_item(Item *item) {
     item->sellIn = item->sellIn - 1;
 
-    if (item->sellIn < 0) {
-        if (item->quality > 0) {
-            item->quality = item->quality - 1;
-        }
-    }
+    int decBy = item->sellIn < 0 ? 2 : 1;
+
+    item->quality -= decBy;
+
+    clip_quality(item);
 }
 
 void update_backstage_passes(Item *item) {
     item->sellIn = item->sellIn - 1;
 
-    int quality = item->quality;
-
-    if (quality < 50) {
-
-        quality = quality + 1;
-
-        if (item->sellIn < 10) {
-            if (quality < 50) {
-                quality = quality + 1;
-            }
-        }
-        if (item->sellIn < 5) {
-            if (quality < 50) {
-                quality = quality + 1;
-            }
-        }
-    }
-
     if (item->sellIn < 0) {
-        quality = 0;
+        item->quality = 0;
+        return;
     }
 
-    item->quality = quality;
+    item->quality += backstage_passes_qd(item->sellIn);
+
+    clip_quality(item);
+
+}
+
+int backstage_passes_qd(int sellIn) {
+    return (sellIn < 5) ? 3 :
+           (sellIn < 10) ? 2 :
+           1;
+}
+
+void clip_quality(Item *item) {
+    if (item->quality > 50) {
+        item->quality = 50;
+    } else if (item->quality < 0) {
+        item->quality = 0;
+    }
 }
 
 void update_brie(Item *item) {
     item->sellIn = item->sellIn - 1;
 
+    // this looks like a bug... brie might go above 50 like this
     if (item->quality >= 50) {
         return;
     }
