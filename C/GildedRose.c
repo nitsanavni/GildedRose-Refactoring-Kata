@@ -13,7 +13,7 @@ struct Updater {
     Update update;
 };
 
-int NUM_OF_UPDATERS = 3;
+int NUM_OF_UPDATERS = 4;
 
 void update_item_quality(Item *item, struct Updater updaters[]);
 
@@ -30,6 +30,10 @@ void default_update_item(Item *item);
 int is_backstage_passes(const Item *item);
 
 int is_brie(const Item *item);
+
+int is_sulfuras(const Item *item);
+
+void noop_update(Item *);
 
 Item *
 init_item(Item *item, const char *name, int sellIn, int quality) {
@@ -49,6 +53,8 @@ print_item(char *buffer, Item *item) {
 
 
 int default_its_me(const Item *i) {
+    (void) i;
+
     return 1;
 };
 
@@ -60,10 +66,12 @@ update_quality(Item items[], int size) {
     const struct Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
     const struct Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
     const struct Updater brie_updater = {.its_me = is_brie, .update = update_brie};
+    const struct Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
 
-    updaters[0] = brie_updater;
-    updaters[1] = backstage_passes_updater;
-    updaters[2] = default_updater;
+    updaters[0] = sulfuras_updater;
+    updaters[1] = brie_updater;
+    updaters[2] = backstage_passes_updater;
+    updaters[3] = default_updater;
 
     for (int i = 0; i < size; i++) {
         update_item_quality(items + i, updaters);
@@ -71,21 +79,21 @@ update_quality(Item items[], int size) {
 }
 
 void update_item_quality(Item *item, struct Updater updaters[]) {
-    int sulfuras = !strcmp(item->name, "Sulfuras, Hand of Ragnaros");
-    int brie = is_brie(item);
+    for (int u = 0; u < NUM_OF_UPDATERS; u++) {
+        const struct Updater updater = updaters[u];
 
-    if (sulfuras) {
-        // do nothing
-    } else {
-        for (int u = 0; u < NUM_OF_UPDATERS; u++) {
-            const struct Updater updater = updaters[u];
-
-            if (updater.its_me(item)) {
-                updater.update(item);
-                break;
-            }
+        if (updater.its_me(item)) {
+            updater.update(item);
+            break;
         }
     }
+}
+
+int is_sulfuras(const Item *item) { return !strcmp(item->name, "Sulfuras, Hand of Ragnaros"); }
+
+void noop_update(Item *item) {
+    // do nothing
+    (void) item;
 }
 
 int is_brie(const Item *item) { return !strcmp(item->name, "Aged Brie"); }
