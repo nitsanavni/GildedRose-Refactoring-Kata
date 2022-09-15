@@ -65,24 +65,33 @@ void update_item_quality(Item *item) {
 void update_backstage_passes(Item *item) {
     item->sellIn = item->sellIn - 1;
 
+    int quality = item->quality;
+
     if (item->quality < 50) {
+
         item->quality = item->quality + 1;
+        quality = quality + 1;
 
         if (item->sellIn < 10) {
             if (item->quality < 50) {
                 item->quality = item->quality + 1;
+                quality = quality + 1;
             }
         }
         if (item->sellIn < 5) {
             if (item->quality < 50) {
                 item->quality = item->quality + 1;
+                quality = quality + 1;
             }
         }
     }
 
     if (item->sellIn < 0) {
         item->quality = 0;
+        quality = 0;
     }
+
+    item->quality = quality;
 }
 
 void update_brie(Item *item) {
