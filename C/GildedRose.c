@@ -82,12 +82,14 @@ void update_brie(Item *item) {
     int do_update = item->quality < 50;
 
     if (do_update) {
-        item->quality = item->quality + 1;
-    }
-
-    if (item->sellIn < 0) {
         if (do_update) {
             item->quality = item->quality + 1;
+        }
+
+        if (item->sellIn < 0) {
+            if (do_update) {
+                item->quality = item->quality + 1;
+            }
         }
     }
 }
