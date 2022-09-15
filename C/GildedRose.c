@@ -34,37 +34,28 @@ void update_item_quality(Item *item) {
     int not_brie = strcmp(item->name, "Aged Brie");
     int not_backstage_passes = strcmp(item->name, "Backstage passes to a TAFKAL80ETC concert");
     int not_sulfuras = strcmp(item->name, "Sulfuras, Hand of Ragnaros");
-    if (not_brie && not_backstage_passes && not_sulfuras)
-    {
-        if (item->quality > 0)
-        {
-            item->quality = item->quality - 1;
-        }
-    }
-    else
-    {
-        if (item->quality < 50)
-        {
+
+    if (!not_brie || !not_backstage_passes || !not_sulfuras) {
+        if (item->quality < 50) {
             item->quality = item->quality + 1;
 
-            if (!not_backstage_passes)
-            {
-                if (item->sellIn < 11)
-                {
-                    if (item->quality < 50)
-                    {
+            if (!not_backstage_passes) {
+                if (item->sellIn < 11) {
+                    if (item->quality < 50) {
                         item->quality = item->quality + 1;
                     }
                 }
 
-                if (item->sellIn < 6)
-                {
-                    if (item->quality < 50)
-                    {
+                if (item->sellIn < 6) {
+                    if (item->quality < 50) {
                         item->quality = item->quality + 1;
                     }
                 }
             }
+        }
+    } else {
+        if (item->quality > 0) {
+            item->quality = item->quality - 1;
         }
     }
 
