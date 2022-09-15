@@ -35,6 +35,10 @@ void update_item_quality(Item *item) {
     int not_backstage_passes = strcmp(item->name, "Backstage passes to a TAFKAL80ETC concert");
     int not_sulfuras = strcmp(item->name, "Sulfuras, Hand of Ragnaros");
 
+    if (!not_sulfuras) {
+        return;
+    }
+
     if (!not_brie || !not_backstage_passes || !not_sulfuras) {
         if (item->quality < 50) {
             item->quality = item->quality + 1;
