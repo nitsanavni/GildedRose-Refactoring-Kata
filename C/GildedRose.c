@@ -38,10 +38,7 @@ void update_item_quality(Item *item) {
     {
         if (item->quality > 0)
         {
-            if (1)
-            {
-                item->quality = item->quality - 1;
-            }
+            item->quality = item->quality - 1;
         }
     }
     else
