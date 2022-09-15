@@ -31,7 +31,7 @@ update_quality(Item items[], int size)
 }
 
 void update_item_quality(Item *item) {
-    int not_brie = strcmp(item->name, "Aged Brie");
+    int brie = !strcmp(item->name, "Aged Brie");
     int not_backstage_passes = strcmp(item->name, "Backstage passes to a TAFKAL80ETC concert");
     int sulfuras = !strcmp(item->name, "Sulfuras, Hand of Ragnaros");
 
@@ -39,7 +39,6 @@ void update_item_quality(Item *item) {
         return;
     }
 
-    int brie = !not_brie;
     if (brie || !not_backstage_passes) {
         if (item->quality < 50) {
             item->quality = item->quality + 1;
