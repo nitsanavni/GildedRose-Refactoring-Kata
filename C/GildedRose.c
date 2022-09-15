@@ -24,9 +24,7 @@ print_item(char* buffer, Item* item)
 void 
 update_quality(Item items[], int size) 
 {
-    int i;
-    
-    for (i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
         update_item_quality(items + i);
     }
