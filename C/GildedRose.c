@@ -7,6 +7,8 @@ void update_item_quality(Item *item);
 
 void update_brie(Item *item);
 
+void update_backstage_passes(Item *item);
+
 Item *
 init_item(Item *item, const char *name, int sellIn, int quality) {
     item->sellIn = sellIn;
@@ -43,27 +45,7 @@ void update_item_quality(Item *item) {
     }
 
     if (backstage_passes) {
-        if (item->quality < 50) {
-            item->quality = item->quality + 1;
-
-            if (item->sellIn < 11) {
-                if (item->quality < 50) {
-                    item->quality = item->quality + 1;
-                }
-            }
-            if (item->sellIn < 6) {
-                if (item->quality < 50) {
-                    item->quality = item->quality + 1;
-                }
-            }
-        }
-
-        item->sellIn = item->sellIn - 1;
-
-        if (item->sellIn < 0) {
-            item->quality = 0;
-        }
-
+        update_backstage_passes(item);
         return;
     }
 
@@ -77,6 +59,29 @@ void update_item_quality(Item *item) {
         if (item->quality > 0) {
             item->quality = item->quality - 1;
         }
+    }
+}
+
+void update_backstage_passes(Item *item) {
+    if (item->quality < 50) {
+        item->quality = item->quality + 1;
+
+        if (item->sellIn < 11) {
+            if (item->quality < 50) {
+                item->quality = item->quality + 1;
+            }
+        }
+        if (item->sellIn < 6) {
+            if (item->quality < 50) {
+                item->quality = item->quality + 1;
+            }
+        }
+    }
+
+    item->sellIn = item->sellIn - 1;
+
+    if (item->sellIn < 0) {
+        item->quality = 0;
     }
 }
 
