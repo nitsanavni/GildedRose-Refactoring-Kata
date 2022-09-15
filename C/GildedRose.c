@@ -80,7 +80,7 @@ void update_item_quality(Item *item) {
             }
             else
             {
-                item->quality = item->quality - item->quality;
+                item->quality = 0;
             }
         }
         else
