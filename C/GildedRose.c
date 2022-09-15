@@ -70,21 +70,18 @@ void update_item_quality(Item *item) {
         return;
     }
 
-    if (brie || backstage_passes) {
+    if (backstage_passes) {
         if (item->quality < 50) {
             item->quality = item->quality + 1;
 
-            if (backstage_passes) {
-                if (item->sellIn < 11) {
-                    if (item->quality < 50) {
-                        item->quality = item->quality + 1;
-                    }
+            if (item->sellIn < 11) {
+                if (item->quality < 50) {
+                    item->quality = item->quality + 1;
                 }
-
-                if (item->sellIn < 6) {
-                    if (item->quality < 50) {
-                        item->quality = item->quality + 1;
-                    }
+            }
+            if (item->sellIn < 6) {
+                if (item->quality < 50) {
+                    item->quality = item->quality + 1;
                 }
             }
         }
@@ -98,17 +95,11 @@ void update_item_quality(Item *item) {
 
     if (item->sellIn < 0)
     {
-        if (brie) {
-            if (item->quality < 50) {
-                item->quality = item->quality + 1;
-            }
+        if (backstage_passes) {
+            item->quality = 0;
         } else {
-            if (backstage_passes) {
-                item->quality = 0;
-            } else {
-                if (item->quality > 0) {
-                    item->quality = item->quality - 1;
-                }
+            if (item->quality > 0) {
+                item->quality = item->quality - 1;
             }
         }
     }
