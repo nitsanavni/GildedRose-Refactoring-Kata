@@ -79,9 +79,7 @@ void update_item_quality(Item *item) {
 void update_brie(Item *item) {
     item->sellIn = item->sellIn - 1;
 
-    int do_update = item->quality < 50;
-
-    if (!do_update) {
+    if (item->quality >= 50) {
         return;
     }
 
