@@ -39,7 +39,8 @@ void update_item_quality(Item *item) {
         return;
     }
 
-    if (!not_brie || !not_backstage_passes) {
+    int brie = !not_brie;
+    if (brie || !not_backstage_passes) {
         if (item->quality < 50) {
             item->quality = item->quality + 1;
 
@@ -67,7 +68,7 @@ void update_item_quality(Item *item) {
 
     if (item->sellIn < 0)
     {
-        if (!not_brie) {
+        if (brie) {
             if (item->quality < 50) {
                 item->quality = item->quality + 1;
             }
