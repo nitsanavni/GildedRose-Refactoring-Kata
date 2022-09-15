@@ -39,7 +39,7 @@ void update_item_quality(Item *item) {
         return;
     }
 
-    if (!not_brie || !not_backstage_passes || !not_sulfuras) {
+    if (!not_brie || !not_backstage_passes) {
         if (item->quality < 50) {
             item->quality = item->quality + 1;
 
@@ -63,10 +63,7 @@ void update_item_quality(Item *item) {
         }
     }
 
-    if (not_sulfuras)
-    {
-        item->sellIn = item->sellIn - 1;
-    }
+    item->sellIn = item->sellIn - 1;
 
     if (item->sellIn < 0)
     {
@@ -76,10 +73,7 @@ void update_item_quality(Item *item) {
             {
                 if (item->quality > 0)
                 {
-                    if (not_sulfuras)
-                    {
-                        item->quality = item->quality - 1;
-                    }
+                    item->quality = item->quality - 1;
                 }
             }
             else
