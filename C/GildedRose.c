@@ -85,11 +85,9 @@ void update_brie(Item *item) {
         return;
     }
 
-//    item->quality = item->quality + 1;
-
-    if (item->sellIn < 0) {
-        item->quality += 2;
-    } else {
+    if (item->sellIn >= 0) {
         item->quality++;
+    } else {
+        item->quality += 2;
     }
 }
