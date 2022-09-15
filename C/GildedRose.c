@@ -3,7 +3,7 @@
 
 #include "GildedRose.h"
 
-void update_item(Item *item);
+void update_item_quality(Item *item);
 
 Item*
 init_item(Item* item, const char *name, int sellIn, int quality)
@@ -29,11 +29,11 @@ update_quality(Item items[], int size)
     for (i = 0; i < size; i++)
     {
         Item * item = items + i;
-        update_item(item);
+        update_item_quality(item);
     }
 }
 
-void update_item(Item *item) {
+void update_item_quality(Item *item) {
     if (strcmp(item->name, "Aged Brie") && strcmp(item->name, "Backstage passes to a TAFKAL80ETC concert"))
     {
         if (item->quality > 0)
