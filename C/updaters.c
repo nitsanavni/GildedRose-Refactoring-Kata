@@ -40,26 +40,12 @@ static int is_sulfuras(const Item *item);
 static void noop_update(Item *item);
 
 static struct Updater *init_updaters() {
-    static struct Updater *updaters;
-
-    if (updaters) {
-        // only malloc once
-        return updaters;
-    }
-
-    Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
-    Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
-    Updater brie_updater = {.its_me = is_brie, .update = update_brie};
-    Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
-
-    // should ever be freed?
-    updaters = malloc(sizeof(Updater) * NUM_OF_UPDATERS);
-
-    updaters[0] = sulfuras_updater;
-    updaters[1] = brie_updater;
-    updaters[2] = backstage_passes_updater;
-    // should be kept last
-    updaters[3] = default_updater;
+    static struct Updater updaters[] = {
+            {.its_me = is_sulfuras, .update = noop_update},
+            {.its_me = is_backstage_passes, .update = update_backstage_passes},
+            {.its_me = is_brie, .update = update_brie},
+            {.its_me = default_its_me, .update = default_update_item}
+    };
 
     return updaters;
 }
