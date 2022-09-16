@@ -8,8 +8,6 @@
 
 const int NUM_OF_UPDATERS = 4;
 
-typedef const Updater Updaters[NUM_OF_UPDATERS];
-
 void update_brie(Item *item);
 
 void update_backstage_passes(Item *item);
@@ -78,7 +76,7 @@ void init_updaters() {
     Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
 
     // should ever be freed?
-    updaters = malloc(sizeof(Updaters));
+    updaters = malloc(sizeof(Updater) * NUM_OF_UPDATERS);
 
     updaters[0] = sulfuras_updater;
     updaters[1] = brie_updater;
