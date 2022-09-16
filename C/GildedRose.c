@@ -17,8 +17,6 @@ const int NUM_OF_UPDATERS = 4;
 
 typedef const Updater Updaters[NUM_OF_UPDATERS];
 
-void update_item_quality(Item *item, Updaters updaters);
-
 void update_brie(Item *item);
 
 void update_backstage_passes(Item *item);
@@ -36,6 +34,8 @@ int is_brie(const Item *item);
 int is_sulfuras(const Item *item);
 
 void noop_update(Item *);
+
+Updater *find_updater_for(const Item *, Updaters);
 
 Item *
 init_item(Item *item, const char *name, int sellIn, int quality) {
@@ -61,29 +61,40 @@ int default_its_me(const Item *i) {
 }
 
 void
-update_quality(Item items[], int size) {
+update_quality(Item items[], int num_of_items) {
     Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
     Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
     Updater brie_updater = {.its_me = is_brie, .update = update_brie};
     Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
 
-    Updaters updaters = {sulfuras_updater, brie_updater, backstage_passes_updater, default_updater};
+    Updaters updaters = {
+            sulfuras_updater,
+            brie_updater,
+            backstage_passes_updater,
+            // should be kept last
+            default_updater
+    };
 
-    for (int i = 0; i < size; i++) {
-        update_item_quality(items + i, updaters);
+    for (int i = 0; i < num_of_items; i++) {
+        Item *item = items + i;
+
+        find_updater_for(item, updaters)->update(item);
     }
 }
 
-void update_item_quality(Item *item, Updaters updaters) {
-    for (int u = 0; u < NUM_OF_UPDATERS; u++) {
-        Updater updater = updaters[u];
+int false(const Item *i) {
+    (void) i;
+    return 0;
+}
 
-        // extract `find`?
-        if (updater.its_me(item)) {
-            updater.update(item);
-            break;
+Updater *find_updater_for(const Item *param, Updaters updaters) {
+    for (int u = 0; u < NUM_OF_UPDATERS; u++) {
+        if (updaters[u].its_me(param)) {
+            return &updaters[u];
         }
     }
+
+    return &updaters[0];
 }
 
 int is_sulfuras(const Item *item) { return !strcmp(item->name, "Sulfuras, Hand of Ragnaros"); }
