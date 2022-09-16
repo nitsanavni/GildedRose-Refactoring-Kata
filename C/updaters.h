@@ -3,6 +3,6 @@
 
 #include "Updater.h"
 
-Updater *find_updater_for(const Item *param);
+Updater *find_updater_for(const Item *item);
 
 #endif //C_UPDATERS_H

@@ -1,26 +1,25 @@
-#include <stdlib.h>
 #include <string.h>
 
 #include "updaters.h"
 
 const int NUM_OF_UPDATERS = 4;
 
-static struct Updater *init_updaters();
+static struct Updater *get_updaters();
 
-Updater *find_updater_for(const Item *param) {
-    struct Updater *updaters = init_updaters();
+static struct Updater *get_default_updater();
+
+Updater *find_updater_for(const Item *item) {
+    struct Updater *updaters = get_updaters();
 
     for (int u = 0; u < NUM_OF_UPDATERS; u++) {
-        if (updaters[u].its_me(param)) {
-            return &updaters[u];
+        struct Updater *updater = updaters + u;
+
+        if (updater->its_me(item)) {
+            return updater;
         }
     }
 
-    const int last = NUM_OF_UPDATERS - 1;
-
-    Updater *default_updater = &updaters[last];
-
-    return default_updater;
+    return get_default_updater();
 }
 
 static int default_its_me(const Item *i);
@@ -39,15 +38,22 @@ static int is_sulfuras(const Item *item);
 
 static void noop_update(Item *item);
 
-static struct Updater *init_updaters() {
+static struct Updater *get_updaters() {
     static struct Updater updaters[] = {
             {.its_me = is_sulfuras, .update = noop_update},
             {.its_me = is_backstage_passes, .update = update_backstage_passes},
             {.its_me = is_brie, .update = update_brie},
+            // should be kept last
             {.its_me = default_its_me, .update = default_update_item}
     };
 
     return updaters;
+}
+
+static struct Updater *get_default_updater() {
+    struct Updater *last_updater = get_updaters() + NUM_OF_UPDATERS - 1;
+
+    return last_updater;
 }
 
 static int default_its_me(const Item *i) {
@@ -61,8 +67,8 @@ static int is_sulfuras(const Item *item) {
 }
 
 static void noop_update(Item *item) {
-    // do nothing
     (void) item;
+    // do nothing
 }
 
 static int is_brie(const Item *item) {
@@ -98,7 +104,6 @@ static void update_backstage_passes(Item *item) {
     item->quality += backstage_passes_qd(item->sellIn);
 
     clip_quality(item);
-
 }
 
 static int backstage_passes_qd(int sellIn) {
