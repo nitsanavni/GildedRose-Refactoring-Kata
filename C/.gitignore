@@ -8,6 +8,10 @@ ApprovalTests*
 GildedRoseUnitTests
 GildedRoseTextTests
 GildedRoseApprovalTests
+// coverage
+*.gcov
+*.gcda
+*.gcno
 
 // gitpod
 core.*

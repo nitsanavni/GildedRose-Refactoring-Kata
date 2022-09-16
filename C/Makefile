@@ -3,7 +3,7 @@ CPPUTEST_HOME = CppUTest
 USER_DIR = .
 
 CPPFLAGS += -I$(CPPUTEST_HOME)/include
-CFLAGS += -g -Wall -Wextra
+CFLAGS += -g -Wall -Wextra -ftest-coverage -fprofile-arcs
 CPP_ONLY_FLAGS = -std=c++11
 LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 
