@@ -9,13 +9,15 @@ LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 
 all : GildedRoseUnitTests GildedRoseTextTests GildedRoseApprovalTests
 
-GildedRose.o : $(USER_DIR)/GildedRose.c
+updaters.o: $(USER_DIR)/updaters.c
+
+GildedRose.o : $(USER_DIR)/GildedRose.c updaters.o
 
 GildedRoseUnitTests : $(USER_DIR)/GildedRoseUnitTests.cc GildedRose.o
-	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -o $@ $(USER_DIR)/GildedRoseUnitTests.cc GildedRose.o $(LD_LIBRARIES)
+	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -o $@ $(USER_DIR)/GildedRoseUnitTests.cc GildedRose.o updaters.o $(LD_LIBRARIES)
 
 GildedRoseApprovalTests : $(USER_DIR)/GildedRoseApprovalTests.cc GildedRose.o
-	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -o $@ $(USER_DIR)/GildedRoseApprovalTests.cc GildedRose.o $(LD_LIBRARIES)
+	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -o $@ $(USER_DIR)/GildedRoseApprovalTests.cc GildedRose.o updaters.o $(LD_LIBRARIES)
 
 GildedRoseTextTests.o : $(USER_DIR)/GildedRoseTextTests.c
 

@@ -1,12 +1,7 @@
 #ifndef ROSE_INCLUDED
 #define ROSE_INCLUDED
 
-typedef struct
-{
-    char *name;
-    int sellIn;
-    int quality;
-} Item;
+#include "Item.h"
 
 extern Item* init_item(Item* item, const char *name, int sellIn, int quality);
 extern void update_quality(Item items[], int num_of_items);

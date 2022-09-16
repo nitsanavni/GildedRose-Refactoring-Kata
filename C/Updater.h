@@ -1,6 +1,8 @@
 #ifndef C_UPDATER_H
 #define C_UPDATER_H
 
+#include "Item.h"
+
 typedef int (*ItsMe)(const Item *);
 
 typedef void (*Update)(Item *);
