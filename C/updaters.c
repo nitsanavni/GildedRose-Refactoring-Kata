@@ -5,19 +5,20 @@
 
 const int NUM_OF_UPDATERS = 4;
 
-static struct Updater *updaters;
-static struct Updater *default_updater;
-
-static void init_updaters();
+static struct Updater *init_updaters();
 
 Updater *find_updater_for(const Item *param) {
-    init_updaters();
+    struct Updater *updaters = init_updaters();
 
     for (int u = 0; u < NUM_OF_UPDATERS; u++) {
         if (updaters[u].its_me(param)) {
             return &updaters[u];
         }
     }
+
+    const int last = NUM_OF_UPDATERS - 1;
+
+    Updater *default_updater = &updaters[last];
 
     return default_updater;
 }
@@ -38,12 +39,15 @@ static int is_sulfuras(const Item *item);
 
 static void noop_update(Item *item);
 
-static void init_updaters() {
+static struct Updater *init_updaters() {
+    static struct Updater *updaters;
+
     if (updaters) {
-        return;
+        // only malloc once
+        return updaters;
     }
 
-    Updater _default_updater = {.its_me = default_its_me, .update = default_update_item};
+    Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
     Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
     Updater brie_updater = {.its_me = is_brie, .update = update_brie};
     Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
@@ -55,20 +59,15 @@ static void init_updaters() {
     updaters[1] = brie_updater;
     updaters[2] = backstage_passes_updater;
     // should be kept last
-    updaters[3] = _default_updater;
+    updaters[3] = default_updater;
 
-    default_updater = &updaters[3];
+    return updaters;
 }
 
 static int default_its_me(const Item *i) {
     (void) i;
 
     return 1;
-}
-
-static int false(const Item *i) {
-    (void) i;
-    return 0;
 }
 
 static int is_sulfuras(const Item *item) {
