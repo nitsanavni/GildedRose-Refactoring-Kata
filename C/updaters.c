@@ -3,6 +3,8 @@
 #include "updaters.h"
 #include "brie_updater.h"
 #include "sulfuras_updater.h"
+#include "backstage_passes_updater.h"
+#include "clip_quality.h"
 
 const int NUM_OF_UPDATERS = 4;
 
@@ -28,10 +30,6 @@ static int default_its_me(const Item *i);
 
 static void default_update_item(Item *item);
 
-static int is_backstage_passes(const Item *item);
-
-static void update_backstage_passes(Item *item);
-
 static Updater **get_updaters() {
     static Updater *updaters[] = {NULL, NULL, NULL, NULL};
 
@@ -39,11 +37,10 @@ static Updater **get_updaters() {
         return updaters;
     }
 
-    static Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
     static Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
 
     updaters[0] = get_sulfuras_updater();
-    updaters[1] = &backstage_passes_updater;
+    updaters[1] = get_backstage_passes_updater();
     updaters[2] = get_brie_updater();
     // should be kept last
     updaters[3] = &default_updater;
@@ -63,12 +60,6 @@ static int default_its_me(const Item *i) {
     return 1;
 }
 
-static int is_backstage_passes(const Item *item) {
-    return !strcmp(item->name, "Backstage passes to a TAFKAL80ETC concert");
-}
-
-static void clip_quality(Item *item);
-
 static void default_update_item(Item *item) {
     item->sellIn = item->sellIn - 1;
 
@@ -79,31 +70,4 @@ static void default_update_item(Item *item) {
     clip_quality(item);
 }
 
-static int backstage_passes_qd(int sellIn);
 
-static void update_backstage_passes(Item *item) {
-    item->sellIn = item->sellIn - 1;
-
-    if (item->sellIn < 0) {
-        item->quality = 0;
-        return;
-    }
-
-    item->quality += backstage_passes_qd(item->sellIn);
-
-    clip_quality(item);
-}
-
-static int backstage_passes_qd(int sellIn) {
-    return (sellIn < 5) ? 3 :
-           (sellIn < 10) ? 2 :
-           1;
-}
-
-static void clip_quality(Item *item) {
-    if (item->quality > 50) {
-        item->quality = 50;
-    } else if (item->quality < 0) {
-        item->quality = 0;
-    }
-}
