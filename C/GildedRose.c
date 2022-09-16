@@ -7,17 +7,17 @@ typedef int (*ItsMe)(const Item *);
 
 typedef void (*Update)(Item *);
 
-struct Updater {
+typedef const struct {
     ItsMe its_me;
 
     Update update;
-};
+} Updater;
 
 const int NUM_OF_UPDATERS = 4;
 
-typedef struct Updater Updaters[NUM_OF_UPDATERS];
+typedef const Updater Updaters[NUM_OF_UPDATERS];
 
-void update_item_quality(Item *item, struct Updater updaters[]);
+void update_item_quality(Item *item, Updaters updaters);
 
 void update_brie(Item *item);
 
@@ -58,32 +58,27 @@ int default_its_me(const Item *i) {
     (void) i;
 
     return 1;
-};
-
+}
 
 void
 update_quality(Item items[], int size) {
-    Updaters updaters;
+    Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
+    Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
+    Updater brie_updater = {.its_me = is_brie, .update = update_brie};
+    Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
 
-    const struct Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
-    const struct Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
-    const struct Updater brie_updater = {.its_me = is_brie, .update = update_brie};
-    const struct Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
-
-    updaters[0] = sulfuras_updater;
-    updaters[1] = brie_updater;
-    updaters[2] = backstage_passes_updater;
-    updaters[3] = default_updater;
+    Updaters updaters = {sulfuras_updater, brie_updater, backstage_passes_updater, default_updater};
 
     for (int i = 0; i < size; i++) {
         update_item_quality(items + i, updaters);
     }
 }
 
-void update_item_quality(Item *item, struct Updater updaters[]) {
+void update_item_quality(Item *item, Updaters updaters) {
     for (int u = 0; u < NUM_OF_UPDATERS; u++) {
-        const struct Updater updater = updaters[u];
+        Updater updater = updaters[u];
 
+        // extract `find`?
         if (updater.its_me(item)) {
             updater.update(item);
             break;
