@@ -1,4 +1,5 @@
 - move updaters to own files
+- updaters should be initialized *once*, there's no need for them to be determined dynamically
 - idea (at least as an exercise) - two passes on the 'items': 1. first pass - assign an 'updater' to the item 2. second pass - call the `update` function
 - ~~have a separate make target for the approval tests~~
 - do the actual kata
