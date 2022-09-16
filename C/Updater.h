@@ -3,9 +3,9 @@
 
 #include "Item.h"
 
-typedef int (*ItsMe)(const Item *);
+typedef int (*const ItsMe)(const Item *);
 
-typedef void (*Update)(Item *);
+typedef void (*const Update)(Item *);
 
 typedef const struct Updater {
     ItsMe its_me;
