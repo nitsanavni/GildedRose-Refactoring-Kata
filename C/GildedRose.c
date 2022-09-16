@@ -24,8 +24,6 @@ print_item(char *buffer, Item *item) {
 
 void
 update_quality(Item items[], int num_of_items) {
-    init_updaters();
-
     for (int i = 0; i < num_of_items; i++) {
         Item *item = items + i;
 
