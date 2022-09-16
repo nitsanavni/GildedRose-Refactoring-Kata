@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "updaters.h"
+#include "brie_updater.h"
 
 const int NUM_OF_UPDATERS = 4;
 
@@ -30,22 +31,31 @@ static int is_backstage_passes(const Item *item);
 
 static void update_backstage_passes(Item *item);
 
-static int is_brie(const Item *item);
-
-static void update_brie(Item *item);
-
 static int is_sulfuras(const Item *item);
 
 static void noop_update(Item *item);
 
 static struct Updater *get_updaters() {
-    static struct Updater updaters[] = {
-            {.its_me = is_sulfuras, .update = noop_update},
-            {.its_me = is_backstage_passes, .update = update_backstage_passes},
-            {.its_me = is_brie, .update = update_brie},
-            // should be kept last
-            {.its_me = default_its_me, .update = default_update_item}
-    };
+    static struct Updater updaters[NUM_OF_UPDATERS];
+
+    static int dunnit = 0;
+
+    if (dunnit) {
+        return updaters;
+    }
+
+    dunnit = 1;
+
+    static Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
+    static Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
+    static Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
+
+    // these are struct copies
+    updaters[0] = sulfuras_updater;
+    updaters[1] = backstage_passes_updater;
+    updaters[2] = *get_brie_updater();
+    // should be kept last
+    updaters[3] = default_updater;
 
     return updaters;
 }
@@ -110,21 +120,6 @@ static int backstage_passes_qd(int sellIn) {
     return (sellIn < 5) ? 3 :
            (sellIn < 10) ? 2 :
            1;
-}
-
-static void update_brie(Item *item) {
-    item->sellIn = item->sellIn - 1;
-
-    // this looks like a bug... brie might go above 50 like this
-    if (item->quality >= 50) {
-        return;
-    }
-
-    if (item->sellIn >= 0) {
-        item->quality++;
-    } else {
-        item->quality += 2;
-    }
 }
 
 static void clip_quality(Item *item) {
