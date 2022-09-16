@@ -5,15 +5,15 @@
 
 const int NUM_OF_UPDATERS = 4;
 
-static struct Updater **get_updaters();
+static Updater **get_updaters();
 
-static struct Updater *get_default_updater();
+static Updater *get_default_updater();
 
 Updater *find_updater_for(const Item *item) {
-    struct Updater **updaters = get_updaters();
+    Updater **updaters = get_updaters();
 
     for (int u = 0; u < NUM_OF_UPDATERS; u++) {
-        struct Updater *updater = updaters[u];
+        Updater *updater = updaters[u];
 
         if (updater->its_me(item)) {
             return updater;
@@ -35,16 +35,12 @@ static int is_sulfuras(const Item *item);
 
 static void noop_update(Item *item);
 
-static struct Updater **get_updaters() {
-    static Updater* updaters[NUM_OF_UPDATERS];
+static Updater **get_updaters() {
+    static Updater *updaters[] = {NULL, NULL, NULL, NULL};
 
-    static int dunnit = 0;
-
-    if (dunnit) {
+    if (updaters[0]) {
         return updaters;
     }
-
-    dunnit = 1;
 
     static Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
     static Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
@@ -59,8 +55,8 @@ static struct Updater **get_updaters() {
     return updaters;
 }
 
-static struct Updater *get_default_updater() {
-    struct Updater *last_updater = get_updaters()[NUM_OF_UPDATERS - 1];
+static Updater *get_default_updater() {
+    Updater *last_updater = get_updaters()[NUM_OF_UPDATERS - 1];
 
     return last_updater;
 }
