@@ -76,10 +76,6 @@ static void noop_update(Item *item) {
     // do nothing
 }
 
-static int is_brie(const Item *item) {
-    return !strcmp(item->name, "Aged Brie");
-}
-
 static int is_backstage_passes(const Item *item) {
     return !strcmp(item->name, "Backstage passes to a TAFKAL80ETC concert");
 }
