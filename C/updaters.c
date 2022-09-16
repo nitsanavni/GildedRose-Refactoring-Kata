@@ -2,6 +2,7 @@
 
 #include "updaters.h"
 #include "brie_updater.h"
+#include "sulfuras_updater.h"
 
 const int NUM_OF_UPDATERS = 4;
 
@@ -31,10 +32,6 @@ static int is_backstage_passes(const Item *item);
 
 static void update_backstage_passes(Item *item);
 
-static int is_sulfuras(const Item *item);
-
-static void noop_update(Item *item);
-
 static Updater **get_updaters() {
     static Updater *updaters[] = {NULL, NULL, NULL, NULL};
 
@@ -42,11 +39,10 @@ static Updater **get_updaters() {
         return updaters;
     }
 
-    static Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
     static Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
     static Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
 
-    updaters[0] = &sulfuras_updater;
+    updaters[0] = get_sulfuras_updater();
     updaters[1] = &backstage_passes_updater;
     updaters[2] = get_brie_updater();
     // should be kept last
@@ -65,15 +61,6 @@ static int default_its_me(const Item *i) {
     (void) i;
 
     return 1;
-}
-
-static int is_sulfuras(const Item *item) {
-    return !strcmp(item->name, "Sulfuras, Hand of Ragnaros");
-}
-
-static void noop_update(Item *item) {
-    (void) item;
-    // do nothing
 }
 
 static int is_backstage_passes(const Item *item) {
