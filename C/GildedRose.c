@@ -13,7 +13,9 @@ struct Updater {
     Update update;
 };
 
-int NUM_OF_UPDATERS = 4;
+const int NUM_OF_UPDATERS = 4;
+
+typedef struct Updater Updaters[NUM_OF_UPDATERS];
 
 void update_item_quality(Item *item, struct Updater updaters[]);
 
@@ -61,7 +63,7 @@ int default_its_me(const Item *i) {
 
 void
 update_quality(Item items[], int size) {
-    struct Updater updaters[NUM_OF_UPDATERS];
+    Updaters updaters;
 
     const struct Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
     const struct Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
