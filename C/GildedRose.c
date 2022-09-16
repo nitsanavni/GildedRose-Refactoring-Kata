@@ -36,9 +36,9 @@ int is_sulfuras(const Item *item);
 
 void noop_update(Item *);
 
-Updater *find_updater_for(const Item *, Updaters);
+Updater *find_updater_for(const Item *param);
 
-Updater *init_updaters();
+void init_updaters();
 
 Item *
 init_item(Item *item, const char *name, int sellIn, int quality) {
@@ -56,7 +56,6 @@ print_item(char *buffer, Item *item) {
     return buffer;
 }
 
-
 int default_its_me(const Item *i) {
     (void) i;
 
@@ -65,36 +64,35 @@ int default_its_me(const Item *i) {
 
 void
 update_quality(Item items[], int num_of_items) {
-    Updater *updaters = init_updaters();
+    init_updaters();
 
     for (int i = 0; i < num_of_items; i++) {
         Item *item = items + i;
 
-        find_updater_for(item, updaters)->update(item);
+        find_updater_for(item)->update(item);
     }
 }
 
 struct Updater *updaters;
 
-Updater *init_updaters() {
+void init_updaters() {
     if (updaters) {
-        return updaters;
+        return;
     }
-
-    updaters = malloc(sizeof(Updaters));
 
     Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
     Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
     Updater brie_updater = {.its_me = is_brie, .update = update_brie};
     Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
 
+    // should ever be freed?
+    updaters = malloc(sizeof(Updaters));
+
     updaters[0] = sulfuras_updater;
     updaters[1] = brie_updater;
     updaters[2] = backstage_passes_updater;
     // should be kept last
     updaters[3] = default_updater;
-
-    return updaters;
 }
 
 int false(const Item *i) {
@@ -102,7 +100,7 @@ int false(const Item *i) {
     return 0;
 }
 
-Updater *find_updater_for(const Item *param, Updaters updaters) {
+Updater *find_updater_for(const Item *param) {
     for (int u = 0; u < NUM_OF_UPDATERS; u++) {
         if (updaters[u].its_me(param)) {
             return &updaters[u];
