@@ -91,8 +91,8 @@ Updater *init_updaters() {
     updaters[0] = sulfuras_updater;
     updaters[1] = brie_updater;
     updaters[2] = backstage_passes_updater;
-    updaters[3] = default_updater;    // should be kept las;
-
+    // should be kept last
+    updaters[3] = default_updater;
 
     return updaters;
 }
