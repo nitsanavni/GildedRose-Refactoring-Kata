@@ -3,16 +3,8 @@
 #include <stdlib.h>
 
 #include "GildedRose.h"
+#include "Updater.h"
 
-typedef int (*ItsMe)(const Item *);
-
-typedef void (*Update)(Item *);
-
-typedef const struct Updater {
-    ItsMe its_me;
-
-    Update update;
-} Updater;
 
 const int NUM_OF_UPDATERS = 4;
 
