@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "GildedRose.h"
 
@@ -7,7 +8,7 @@ typedef int (*ItsMe)(const Item *);
 
 typedef void (*Update)(Item *);
 
-typedef const struct {
+typedef const struct Updater {
     ItsMe its_me;
 
     Update update;
@@ -37,6 +38,8 @@ void noop_update(Item *);
 
 Updater *find_updater_for(const Item *, Updaters);
 
+Updater *init_updaters();
+
 Item *
 init_item(Item *item, const char *name, int sellIn, int quality) {
     item->sellIn = sellIn;
@@ -62,24 +65,36 @@ int default_its_me(const Item *i) {
 
 void
 update_quality(Item items[], int num_of_items) {
-    Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
-    Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
-    Updater brie_updater = {.its_me = is_brie, .update = update_brie};
-    Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
-
-    Updaters updaters = {
-            sulfuras_updater,
-            brie_updater,
-            backstage_passes_updater,
-            // should be kept last
-            default_updater
-    };
+    Updater *updaters = init_updaters();
 
     for (int i = 0; i < num_of_items; i++) {
         Item *item = items + i;
 
         find_updater_for(item, updaters)->update(item);
     }
+}
+
+struct Updater *updaters;
+
+Updater *init_updaters() {
+    if (updaters) {
+        return updaters;
+    }
+
+    updaters = malloc(sizeof(Updaters));
+
+    Updater default_updater = {.its_me = default_its_me, .update = default_update_item};
+    Updater backstage_passes_updater = {.its_me = is_backstage_passes, .update = update_backstage_passes};
+    Updater brie_updater = {.its_me = is_brie, .update = update_brie};
+    Updater sulfuras_updater = {.its_me = is_sulfuras, .update = noop_update};
+
+    updaters[0] = sulfuras_updater;
+    updaters[1] = brie_updater;
+    updaters[2] = backstage_passes_updater;
+    updaters[3] = default_updater;    // should be kept las;
+
+
+    return updaters;
 }
 
 int false(const Item *i) {
