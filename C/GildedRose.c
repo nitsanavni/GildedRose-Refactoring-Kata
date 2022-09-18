@@ -13,12 +13,6 @@ init_item(Item* item, const char *name, int sellIn, int quality)
     return item;
 }
 
-extern char* 
-print_item(char* buffer, Item* item) 
-{
-    sprintf(buffer, "%s, %d, %d", item->name, item->sellIn, item->quality);
-}
-
 void 
 update_quality(Item items[], int size) 
 {
