@@ -27,7 +27,7 @@ typedef const struct {
     const update update;
 } Updater;
 
-static Updater *find_updater(const Item *item);
+static Updater *get_updater_for(const Item *item);
 
 Item *
 init_item(Item *item, const char *name, int sellIn, int quality) {
@@ -38,11 +38,6 @@ init_item(Item *item, const char *name, int sellIn, int quality) {
     return item;
 }
 
-extern char *
-print_item(char *buffer, Item *item) {
-    sprintf(buffer, "%s, %d, %d", item->name, item->sellIn, item->quality);
-}
-
 void
 update_quality(Item items[], int size) {
     for (int i = 0; i < size; i++) {
@@ -51,18 +46,20 @@ update_quality(Item items[], int size) {
 }
 
 static void update_item(Item *item) {
-    find_updater(item)->update(item);
+    get_updater_for(item)->update(item);
 }
 
-static Updater *find_updater(const Item *item) {
-    static const int NUM_OF_HANDLERS = 4;
+typedef int (*const is_item)(const Item *);
 
-    typedef int (*const is_item)(const Item *);
+typedef const struct {
+    const is_item is_item;
+    const Updater updater;
+} Handler;
 
-    static const struct {
-        const is_item is;
-        const Updater updater;
-    } handlers[] = {
+static const int NUM_OF_HANDLERS = 4;
+
+Handler *get_handlers() {
+    static const Handler handlers[] = {
             {is_brie,             {update_brie}},
             {is_backstage_passes, {update_backstage_passes}},
             {is_sulfuras,         {update_sulfuras}},
@@ -70,16 +67,21 @@ static Updater *find_updater(const Item *item) {
             {is_true,             {update_regular_item}}
     };
 
+    return handlers;
+}
+
+Handler *find_handler_for(const Item *item) {
+    Handler *handlers = get_handlers();
 
     for (int h = 0; h < NUM_OF_HANDLERS; h++) {
-        if (handlers[h].is(item)) {
-            return &handlers[h].updater;
+        if (handlers[h].is_item(item)) {
+            return handlers + h;
         }
     }
+}
 
-    const Updater *default_updater = &handlers[NUM_OF_HANDLERS - 1].updater;
-
-    return default_updater;
+static Updater *get_updater_for(const Item *item) {
+    return &find_handler_for(item)->updater;
 }
 
 int is_true(const Item *item) {
