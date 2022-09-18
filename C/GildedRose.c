@@ -13,6 +13,12 @@ void update_sulfuras(Item *item);
 
 void update_regular_item(Item *item);
 
+int is_brie(const Item *item);
+
+int is_backstage_passes(const Item *item);
+
+int is_sulfuras(const Item *item);
+
 Item *
 init_item(Item *item, const char *name, int sellIn, int quality) {
     item->sellIn = sellIn;
@@ -35,9 +41,9 @@ update_quality(Item items[], int size) {
 }
 
 void update_item(Item *item) {
-    int brie = !strcmp(item->name, "Aged Brie");
-    int backstage_passes = !strcmp(item->name, "Backstage passes to a TAFKAL80ETC concert");
-    int sulfuras = !strcmp(item->name, "Sulfuras, Hand of Ragnaros");
+    int brie = is_brie(item);
+    int backstage_passes = is_backstage_passes(item);
+    int sulfuras = is_sulfuras(item);
 
     if (brie) {
         update_brie(item);
@@ -49,6 +55,12 @@ void update_item(Item *item) {
         update_regular_item(item);
     }
 }
+
+int is_sulfuras(const Item *item) { return !strcmp(item->name, "Sulfuras, Hand of Ragnaros"); }
+
+int is_backstage_passes(const Item *item) { return !strcmp(item->name, "Backstage passes to a TAFKAL80ETC concert"); }
+
+int is_brie(const Item *item) { return !strcmp(item->name, "Aged Brie"); }
 
 void update_regular_item(Item *item) {
     if (item->quality > 0) {
