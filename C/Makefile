@@ -5,12 +5,12 @@ USER_DIR = .
 CPPFLAGS += -I$(CPPUTEST_HOME)/include
 CFLAGS += -g -Wall -Wextra -ftest-coverage -fprofile-arcs
 CPP_ONLY_FLAGS = -std=c++11
-LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
+LD_LIBRARIES = -lCppUTest -lCppUTestExt
 
 all : GildedRoseUnitTests GildedRoseTextTests GildedRoseApprovalTests
 
 clean-cov:
-	git clean -fx -- *.g*
+	git clean -fx -- *.g* &> /dev/null
 
 GildedRose.o : $(USER_DIR)/GildedRose.c clean-cov
 
