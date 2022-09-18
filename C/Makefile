@@ -43,4 +43,4 @@ unit: GildedRoseUnitTests
 approvals: GildedRoseApprovalTests
 	./GildedRoseApprovalTests; \
 	gcov GildedRose.c; \
-	grep \#\# GildedRose.c.g* || true
+	grep \#\# GildedRose.c.g* | head -n 5 || true
