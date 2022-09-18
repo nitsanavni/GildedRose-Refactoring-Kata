@@ -41,15 +41,11 @@ update_quality(Item items[], int size) {
 }
 
 void update_item(Item *item) {
-    int brie = is_brie(item);
-    int backstage_passes = is_backstage_passes(item);
-    int sulfuras = is_sulfuras(item);
-
-    if (brie) {
+    if (is_brie(item)) {
         update_brie(item);
-    } else if (backstage_passes) {
+    } else if (is_backstage_passes(item)) {
         update_backstage_passes(item);
-    } else if (sulfuras) {
+    } else if (is_sulfuras(item)) {
         update_sulfuras(item);
     } else {
         update_regular_item(item);
