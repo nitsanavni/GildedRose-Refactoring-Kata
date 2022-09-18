@@ -17,8 +17,11 @@ GildedRose.o : $(USER_DIR)/GildedRose.c clean-cov
 GildedRoseUnitTests : $(USER_DIR)/GildedRoseUnitTests.cc GildedRose.o
 	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -o $@ $(USER_DIR)/GildedRoseUnitTests.cc GildedRose.o $(LD_LIBRARIES)
 
-GildedRoseApprovalTests : $(USER_DIR)/GildedRoseApprovalTests.cc GildedRose.o
-	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -o $@ $(USER_DIR)/GildedRoseApprovalTests.cc GildedRose.o $(LD_LIBRARIES)
+GildedRoseApprovalTests.o : $(USER_DIR)/GildedRoseApprovalTests.cc
+	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -c -o $@ $(USER_DIR)/GildedRoseApprovalTests.cc
+
+GildedRoseApprovalTests : $(USER_DIR)/GildedRoseApprovalTests.o GildedRose.o
+	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -o $@ $(USER_DIR)/GildedRoseApprovalTests.o GildedRose.o $(LD_LIBRARIES)
 
 GildedRoseTextTests.o : $(USER_DIR)/GildedRoseTextTests.c
 
