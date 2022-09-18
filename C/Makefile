@@ -9,7 +9,10 @@ LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 
 all : GildedRoseUnitTests GildedRoseTextTests GildedRoseApprovalTests
 
-GildedRose.o : $(USER_DIR)/GildedRose.c
+clean-cov:
+	git clean -fx -- *.g*
+
+GildedRose.o : $(USER_DIR)/GildedRose.c clean-cov
 
 GildedRoseUnitTests : $(USER_DIR)/GildedRoseUnitTests.cc GildedRose.o
 	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -o $@ $(USER_DIR)/GildedRoseUnitTests.cc GildedRose.o $(LD_LIBRARIES)
