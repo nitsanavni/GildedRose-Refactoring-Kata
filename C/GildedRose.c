@@ -9,7 +9,7 @@ void update_brie(Item *item);
 
 void update_backstage_passes(Item *item);
 
-void update_sulfuras();
+void update_sulfuras(Item *item);
 
 void update_regular_item(Item *item);
 
@@ -41,12 +41,10 @@ void update_item(Item *item) {
 
     if (brie) {
         update_brie(item);
-
     } else if (backstage_passes) {
         update_backstage_passes(item);
-
     } else if (sulfuras) {
-        update_sulfuras();
+        update_sulfuras(item);
     } else {
         update_regular_item(item);
     }
@@ -66,7 +64,9 @@ void update_regular_item(Item *item) {
     }
 }
 
-void update_sulfuras() {// do nothing
+void update_sulfuras(Item *item) {
+    (void) item;
+    // do nothing
 }
 
 void update_backstage_passes(Item *item) {
