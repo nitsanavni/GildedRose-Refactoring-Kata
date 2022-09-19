@@ -22,3 +22,6 @@ core.*
 
 // debug
 *.dSYM
+
+// cccc
+.cccc
