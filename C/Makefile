@@ -10,7 +10,8 @@ LD_LIBRARIES = -lCppUTest -lCppUTestExt
 all : GildedRoseUnitTests GildedRoseTextTests GildedRoseApprovalTests
 
 clean-cov:
-	git clean -fx -- *.g* &> /dev/null
+	git clean -fx -- *.g* &> /dev/null; \
+	echo "" > cov
 
 GildedRose.o : $(USER_DIR)/GildedRose.c clean-cov
 
@@ -40,7 +41,24 @@ text: GildedRoseTextTests
 unit: GildedRoseUnitTests
 	./GildedRoseUnitTests
 
-approvals: GildedRoseApprovalTests
+approvals: GildedRoseApprovalTests gcov
 	./GildedRoseApprovalTests; \
-	gcov GildedRose.c; \
-	grep \#\# GildedRose.c.g* | head -n 5 || true
+	gcov GildedRose.c | grep executed > cov
+
+test-watch: entr GildedRoseApprovalTests
+	ls GildedRose.c | entr -c make -s approvals
+
+entr:
+	which entr || brew install entr
+
+cov-watch: entr
+	ls cov | entr -c cat cov
+
+cccc-watch: cccc entr
+	ls GildedRose.c | entr -c ./cccc.sh
+
+cccc:
+	which $(CCCC) &> /dev/null
+
+gcov:
+	which gcov &> /dev/null
