@@ -13,6 +13,7 @@ GildedRoseApprovalTests
 *.gcov
 *.gcda
 *.gcno
+cov
 
 // gitpod
 core.*
