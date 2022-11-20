@@ -1,8 +1,8 @@
-#define _SVID_SOURCE
+#define _DEFAULT_SOURCE
 
 #include <string.h>
 
-#undef _SVID_SOURCE
+#undef _DEFAULT_SOURCE
 
 #include "GildedRose.h"
 
