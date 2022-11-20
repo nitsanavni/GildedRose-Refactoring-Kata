@@ -1,6 +1,0 @@
-- ~~have a separate make target for the approval tests~~
-- do the actual kata
-- why does clang not work in vscode?
-- should some of this be part of approvals?
-- combination approvals
-- idea - 2D table iso one line per item: rows are days, columns are items
