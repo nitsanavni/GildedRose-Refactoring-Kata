@@ -3,26 +3,13 @@ CPPUTEST_HOME = CppUTest
 USER_DIR = .
 
 CPPFLAGS += -I$(CPPUTEST_HOME)/include
-CFLAGS += -g -Wall -Wextra -ftest-coverage -fprofile-arcs
+CFLAGS += -g -Wall -Wextra
 CPP_ONLY_FLAGS = -std=c++11
-LD_LIBRARIES = -lCppUTest -lCppUTestExt
 
-all : GildedRoseUnitTests GildedRoseTextTests GildedRoseApprovalTests
+all : GildedRoseTextTests
 
-clean-cov:
-	git clean -fx -- *.g* &> /dev/null; \
-	echo "" > cov
 
-GildedRose.o : $(USER_DIR)/GildedRose.c clean-cov
-
-GildedRoseUnitTests : $(USER_DIR)/GildedRoseUnitTests.cc GildedRose.o
-	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -o $@ $(USER_DIR)/GildedRoseUnitTests.cc GildedRose.o $(LD_LIBRARIES)
-
-GildedRoseApprovalTests.o : $(USER_DIR)/GildedRoseApprovalTests.cc
-	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -c -o $@ $(USER_DIR)/GildedRoseApprovalTests.cc
-
-GildedRoseApprovalTests : $(USER_DIR)/GildedRoseApprovalTests.o GildedRose.o
-	$(CXX) $(CPPFLAGS) $(CPP_ONLY_FLAGS) $(CFLAGS) -o $@ $(USER_DIR)/GildedRoseApprovalTests.o GildedRose.o $(LD_LIBRARIES)
+GildedRose.o : $(USER_DIR)/GildedRose.c
 
 GildedRoseTextTests.o : $(USER_DIR)/GildedRoseTextTests.c
 
@@ -38,27 +25,5 @@ check-syntax:
 text: GildedRoseTextTests
 	./GildedRoseTextTests
 
-unit: GildedRoseUnitTests
-	./GildedRoseUnitTests
-
-approvals: GildedRoseApprovalTests gcov
-	./GildedRoseApprovalTests; \
-	gcov GildedRose.c | grep executed > cov
-
-test-watch: entr GildedRoseApprovalTests
-	ls GildedRose.c | entr -c make -s approvals
-
-entr:
-	which entr || brew install entr
-
-cov-watch: entr
-	ls cov | entr -c cat cov
-
-cccc-watch: cccc entr
-	ls GildedRose.c | entr -c ./cccc.sh
-
-cccc:
-	which $(CCCC) &> /dev/null
-
-gcov:
-	which gcov &> /dev/null
+test: GildedRoseTextTests
+	./GildedRoseTextTests | python3 -m approvaltests -t gilded-rose
