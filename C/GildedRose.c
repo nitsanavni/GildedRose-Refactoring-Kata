@@ -1,4 +1,8 @@
+#define _SVID_SOURCE
+
 #include <string.h>
+
+#undef _SVID_SOURCE
 
 #include "GildedRose.h"
 
@@ -16,7 +20,8 @@ update_quality(Item items[], int size) {
     int i;
 
     for (i = 0; i < size; i++) {
-        if (strcmp(items[i].name, "Aged Brie") && strcmp(items[i].name, "Backstage passes to a TAFKAL80ETC concert")) {
+        if (strcmp(items[i].name, "Aged Brie") &&
+            strcmp(items[i].name, "Backstage passes to a TAFKAL80ETC concert")) {
             if (items[i].quality > 0) {
                 if (strcmp(items[i].name, "Sulfuras, Hand of Ragnaros")) {
                     items[i].quality = items[i].quality - 1;
